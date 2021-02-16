@@ -1,0 +1,64 @@
+---
+title: "BIS15L Project"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##MRI Data and Alzhiemer's Disease
+
+In this project, we are using data from the Open Access Series of Imaging Studies (OASIS), made available by the Washingtom UNiversity Alzheimer's Disease Research Center, Dr. Randy Buckner at the Howard Hughes Medical Institute (HHMI), the Neuroinformatics Research Group (NRG) at Washington University School of Medicine, and the Biomedical Informatics Research Network (BIRN). [MRI and Alzheimer's Disease](https://www.kaggle.com/jboysen/mri-and-alzheimers)
+
+Load libraries
+```{r}
+library(tidyverse)
+library(RColorBrewer)
+library(paletteer)
+library(janitor)
+library(here)
+```
+
+```{r}
+options(scipen=999)
+```
+
+```{r}
+longitudinal <- readr::read_csv("data/oasis_longitudinal.csv")
+xsectional <- readr::read_csv("data/oasis_cross-sectional.csv")
+```
+```{r}
+glimpse(longitudinal)
+```
+
+```{r}
+summary(longitudinal)
+```
+```{r}
+longitudinal <- janitor::clean_names(longitudinal)
+xsectional <- janitor::clean_names(xsectional)
+```
+
+```{r}
+names(longitudinal)
+names(xsectional)
+```
+```{r}
+longitudinal$age <- as.factor(longitudinal$age)
+```
+
+
+```{r}
+longitudinal %>% 
+  ggplot(aes(x=age, y=n_wbv, fill=m_f))+
+  geom_col()
+```
+
+```{r}
+longitudinal %>% 
+  ggplot(aes(x=educ))+geom_bar()
+```
+
