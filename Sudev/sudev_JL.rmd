@@ -1,0 +1,92 @@
+# BIS15L-Project
+```{r}
+library(tidyverse)
+library(shiny)
+library(shinydashboard)
+library(naniar)
+library(lubridate)
+```
+
+```{r}
+library(here)
+```
+
+# Reading the two CSV
+```{r}
+longitudinal<- readr::read_csv(here("data","oasis_longitudinal.csv"))
+cross_sectional<- readr::read_csv(here("data","oasis_cross-sectional.csv"))
+```
+
+# Convert SES to factor
+```{r}
+longitudinal$SES <- as.factor(longitudinal$SES)
+```
+
+# Taking a peek at the data
+```{r}
+glimpse(longitudinal)
+glimpse(cross_sectional)
+```
+
+```{r}
+longitudinal %>%
+  filter(Group == 'Demented' | Group == 'Converted') %>%
+  ggplot(aes(x = SES)) + 
+  geom_bar() + 
+  labs(title = "Distribution of people with dementia by socio economic status (SES)")
+```
+
+```{r}
+longitudinal %>%
+  filter(Group == 'Demented' | Group == 'Converted') %>%
+  ggplot(aes(x = Age)) + 
+  geom_bar() + 
+  labs(title = "Distribution of people with dementia by age")
+```
+
+```{r}
+n_patients <- 
+  longitudinal %>%
+  filter(SES==2) %>%
+  nrow()
+
+cat(n_patients,"fit listed criteria")
+```
+
+```{r}
+shinyApp(
+    ui = pageWithSidebar(
+        headerPanel("SES"),
+        sidebarPanel(
+        selectizeInput('var1', 'Select variable 1', choices = c("choose" = "", unique(longitudinal$SES))),
+        ),
+        mainPanel(
+            tableOutput("table")
+        )
+    ),
+    
+    server = function(input, output, session) {
+        
+        tab <- reactive({ # <-- Reactive function here
+            
+            longitudinal %>% 
+                filter(SES == input$var1) %>%
+                nrow()
+            
+        })
+        
+        output$table <- renderTable({ 
+            
+            tab()
+            
+        })
+        
+    },
+    
+    options = list(height = 500)
+    
+)
+```
+
+
+
