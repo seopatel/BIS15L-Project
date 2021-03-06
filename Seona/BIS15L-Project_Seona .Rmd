@@ -107,7 +107,7 @@ age_xsectional <- xsectional %>%
 age_xsectional+facet_wrap(~educ) +
   theme(axis.text.x = element_text(angle=60, hjust=1), plot.title = element_text(size = rel(1), hjust = 0.5))+
   scale_fill_brewer(palette = "Set1")+
-  labs(title = "Age Facet Wrap", x= "Age")
+  labs(title = "EDUC Facet Wrap", x= "Age")
 ```
 
 ```{r}
@@ -270,5 +270,92 @@ age_long <- longitudinal %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   labs(title = "Distribution of Group", x= "Age")
 age_long
+```
+```{r}
+age_long <- longitudinal %>% 
+  filter(age!='NA' | group!='NA') %>%  
+  filter(group=="Converted") %>% 
+  ggplot(aes(x=age, fill=group))+
+  geom_bar(alpha=0.5)+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Group", x= "Age")
+age_long
+```
+
+
+
+COUNT Graphs
+**AGE**
+```{r}
+xsectional %>% 
+  ggplot(aes(x=age))+
+  geom_bar()
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=age))+
+  geom_bar()
+```
+**SES**
+```{r}
+xsectional %>% 
+  ggplot(aes(x=ses))+
+  geom_bar()
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=ses))+
+  geom_bar()
+```
+
+**Sex**
+```{r}
+xsectional %>% 
+  ggplot(aes(x=m_f))+
+  geom_bar()
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=m_f))+
+  geom_bar()
+```
+**Education**
+```{r}
+xsectional %>% 
+  ggplot(aes(x=educ))+
+  geom_bar()
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=educ))+
+  geom_bar()
+```
+```{r}
+#install.packages("ggcorrplot")
+library(ggcorrplot)
+library(ggplot2)
+#install.packages("GGally")
+library("GGally")
+```
+
+```{r}
+f<-longitudinal
+corr <- round(cor(f), 1)
+head(corr[, 1:12])
+f$subject_id=NULL
+f$group=NULL
+f$mri_id=NULL
+f$hand=NULL
+f$m_f=NULL
+ggcorrplot(f)
+```
+
+```{r}
+ggcorr(longitudinal)
+ggcorr(xsectional)
+```
+```{r}
+plot_matrix <- print(ggpairs(df, title = "Matrix Plot",
+        aes(color = M.F, alpha = .8)))
 ```
 
