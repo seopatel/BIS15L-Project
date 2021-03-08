@@ -281,6 +281,9 @@ age_long <- longitudinal %>%
   labs(title = "Distribution of Group", x= "Age")
 age_long
 ```
+```{r}
+
+```
 
 
 
@@ -288,48 +291,103 @@ COUNT Graphs
 **AGE**
 ```{r}
 xsectional %>% 
-  ggplot(aes(x=age))+
-  geom_bar()
+  ggplot(aes(x=age, fill= "red", alpha= 0.5))+
+  geom_bar()+
+  labs(title="Cross-Sectional Age Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=age))+
-  geom_bar()
+  ggplot(aes(x=age, fill= "blue", alpha = 0.5))+
+  geom_bar()+
+  labs(title="Longitudinal Age Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
 **SES**
 ```{r}
 xsectional %>% 
-  ggplot(aes(x=ses))+
-  geom_bar()
+  ggplot(aes(x=ses, fill="blue", alpha = 0.7))+
+  geom_bar()+
+  labs(title="Cross-Sectional Socioeconomic Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=ses))+
-  geom_bar()
+  ggplot(aes(x=ses, fill="blue", alpha = 0.7))+
+  geom_bar()+
+  labs(title="Longitudinal Socioeconomic Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
 **Sex**
 ```{r}
 xsectional %>% 
-  ggplot(aes(x=m_f))+
-  geom_bar()
+  ggplot(aes(x=m_f, fill = "red", alpha = 0.5))+
+  geom_bar()+
+  labs(title="Cross-Sectional Sex Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=m_f))+
-  geom_bar()
+  ggplot(aes(x=m_f, fill = "red", alpha = 0.5))+
+  geom_bar()+
+  labs(title="Longitudinal Sex Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 **Education**
 ```{r}
 xsectional %>% 
-  ggplot(aes(x=educ))+
-  geom_bar()
+  ggplot(aes(x=educ, fill = "red", alpha = 0.5))+
+  geom_bar()+
+   labs(title="Cross-Sectional Education Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=educ))+
-  geom_bar()
+  ggplot(aes(x=educ, fill = , alpha=0.5))+
+  geom_bar()+
+   labs(title="Longitudinal Education Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
+```{r}
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=group, fill = group, alpha=0.5))+
+  geom_bar()+
+   labs(title="Longitudinal Dementia Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+
+
 ```{r}
 #install.packages("ggcorrplot")
 library(ggcorrplot)
@@ -338,24 +396,31 @@ library(ggplot2)
 library("GGally")
 ```
 
+
+**Correlation plot**
 ```{r}
-f<-longitudinal
-corr <- round(cor(f), 1)
-head(corr[, 1:12])
-f$subject_id=NULL
-f$group=NULL
-f$mri_id=NULL
-f$hand=NULL
-f$m_f=NULL
-ggcorrplot(f)
+ggcorr(longitudinal)+
+  labs(title="Longitudinal Correlation Plot")+
+  theme(plot.title = element_text(hjust = .5))
+
+ggcorr(xsectional)+
+   labs(title="Cross-Sectional Correlation Plot")+
+  theme(plot.title = element_text(hjust = .5))
 ```
 
 ```{r}
-ggcorr(longitudinal)
-ggcorr(xsectional)
+df_cross <- xsectional
+df_long <- longitudinal
+glimpse(df_cross)
 ```
 ```{r}
-plot_matrix <- print(ggpairs(df, title = "Matrix Plot",
-        aes(color = M.F, alpha = .8)))
+df_cross <- df_cross %>%
+  select(-c("id", "hand", "delay"))
+colnames(df_cross)[3] <- "educ"
+df_cross <- df_cross[complete.cases(df_cross),]
+df_long <- df_long %>%
+  select(-c(subject_id, mri_id, hand, visit, mr_delay, group))
+df <- rbind(df_cross,df_long)
+glimpse(df)
 ```
 
