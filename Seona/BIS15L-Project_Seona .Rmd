@@ -301,7 +301,7 @@ xsectional %>%
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=age, fill= "blue", alpha = 0.5))+
+  ggplot(aes(x=age, fill= age, alpha = 0.5))+
   geom_bar()+
   labs(title="Longitudinal Age Distribution",
        x=NULL,
@@ -322,7 +322,7 @@ xsectional %>%
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=ses, fill="blue", alpha = 0.7))+
+  ggplot(aes(x=as.factor(ses), fill=as.factor(ses), alpha = 0.7))+
   geom_bar()+
   labs(title="Longitudinal Socioeconomic Status Distribution",
        x=NULL,
@@ -344,7 +344,7 @@ xsectional %>%
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=m_f, fill = "red", alpha = 0.5))+
+  ggplot(aes(x=m_f, fill = m_f, alpha = 0.5))+
   geom_bar()+
   labs(title="Longitudinal Sex Distribution",
        x=NULL,
@@ -423,4 +423,3 @@ df_long <- df_long %>%
 df <- rbind(df_cross,df_long)
 glimpse(df)
 ```
-
