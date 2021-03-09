@@ -1,0 +1,34 @@
+---
+title: "BIS15L Final Project Group 9"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##BIS15L Final Project Group 9
+
+In this project, we are using data from the Open Access Series of Imaging Studies (OASIS), made available by the Washingtom UNiversity Alzheimer's Disease Research Center, Dr. Randy Buckner at the Howard Hughes Medical Institute (HHMI), the Neuroinformatics Research Group (NRG) at Washington University School of Medicine, and the Biomedical Informatics Research Network (BIRN). Our datasets were found on kaggle: [MRI and Alzheimer's Disease](https://www.kaggle.com/jboysen/mri-and-alzheimers).
+
+
+Load libraries
+```{r}
+library(tidyverse)
+library(RColorBrewer)
+library(paletteer)
+library(janitor)
+library(here)
+library(GGally)
+library(viridis)
+```
+
+```{r}
+options(scipen=999)
+```
+
+```{r}
+longitudinal <- readr::read_csv("data/oasis_longitudinal.csv")
+xsectional <- readr::read_csv("data/oasis_cross-sectional.csv")
+```
