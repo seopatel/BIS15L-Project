@@ -222,12 +222,142 @@ ggcorr(xsectional, label = TRUE, label_size = 3)+
   labs(title="Cross-Sectional Correlation Plot")+
   theme(plot.title = element_text(hjust = .5))
 ```
-
-
-
-
-
-
+```{r}
+xsectional %>% ##comparison of n_wbv between demented patients and age matched controls
+  group_by(as.factor(cdr)) %>% 
+  ggplot(aes(x=as.factor(cdr),y=n_wbv,group=as.factor(cdr),color=as.factor(cdr),fill=as.factor(cdr),alpha=.5))+
+  geom_boxplot()+
+  geom_jitter()+#Could Exclude
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")+
+  labs(title=" Normalized Whole Brain Volume vs Clinical Dementia Rating",
+       x="Clinical Dementia Rating",
+       y="Normalized Whole Brain Volume")+
+  scale_x_discrete(labels=c("NA" = "Young"))
+```
+```{r}
+xsectional %>% #Violin comparison of Demented vs Nondemented and age
+  filter(cdr!="NA", age>60) %>% 
+  ggplot(aes(x = as.factor(cdr), y = age, group=cdr,color=as.factor(cdr))) + 
+  geom_violin(aes(fill = as.factor(cdr),alpha=.5)) + 
+  geom_boxplot(width = 0.2, alpha=1)+
+  theme_classic()+
+  labs(title="Age Distribution Between Groups",
+       x="CDR",
+       y="Age Distribution ")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+```{r}
+longitudinal %>% #Comparison of education between demented participants and age matched controls
+  filter(age>60,group!="Converted",visit==1) %>% 
+  group_by(group) %>% 
+  ggplot(aes(x=group,y=educ,fill=group,color=group,alpha=.5))+
+  geom_boxplot()+
+  theme_classic()+
+  labs(title="Years of Education vs Dementia Status",
+       x=NULL,
+       y="Education")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")+
+  scale_x_discrete(labels=c("Nondemented" = "Non-Demented"))
+```
+```{r}
+longitudinal %>% #Comparison of ses between demented participants and age matched controls
+  filter(age>60,group!="Converted",ses!="NA",visit==1) %>% 
+  group_by(group) %>% 
+  ggplot(aes(x=group,y=ses,fill=group,color=group,alpha=.5))+
+  geom_boxplot()+
+  labs(title="SES vs Dementia Status",
+       x=NULL,
+       y="SES")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")+
+  scale_x_discrete(labels=c("Nondemented" = "Non-Demented"))
+```
+```{r}
+longitudinal %>% #Comparison of MMSE and CDR
+  filter(visit==1 | visit==2,mmse!="NA") %>% 
+  mutate(cdr = as.factor(cdr)) %>%
+  ggplot(aes(cdr, mmse, fill = cdr,color=cdr))+
+  geom_boxplot(alpha = 0.5) +
+  geom_jitter(aes(color = cdr),alpha = 0.7)+
+  theme_classic()+
+  labs(title= "Mini-Mental State Examination",
+       x="Clinical Dementia Rating",
+       y="Mini-Mental State Examination")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+```{r}
+longitudinal %>% #Observing the change between visits in n_wbv of the Nondemented group
+  filter(group=="Nondemented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
+  geom_point()+
+  geom_line()+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Non-Demented|CDR=0)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+```{r}
+longitudinal %>% #Observing the change between visits in n_wbv of the Demented group
+  filter(group=="Demented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
+  geom_point()+
+  geom_line()+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Demented|CDR>0)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+```{r}
+longitudinal %>% #Observing the change between visits in n_wbv of the converted group
+  filter(group=="Converted") %>% 
+  ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
+  geom_point()+
+  geom_line()+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Converted)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+```{r}
+longitudinal %>% #Observing the change between visits in n_wbv of the Nondemented group with trend line
+  filter(group=="Nondemented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
+  geom_point()+
+  geom_smooth(method="lm",se=TRUE)+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Nondemented)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+```{r}
+longitudinal %>% #Observing the change between visits in n_wbv of the Demented  group with trand line
+  filter(group=="Demented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
+  geom_point()+
+  geom_smooth(method=lm,se=TRUE,fullrange=TRUE)+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Demented)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+```{r}
+longitudinal %>% #Observing the change between visits in n_wbv of the converted group with trend line and standard error
+  filter(group=="Converted") %>% 
+  ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
+  geom_point()+
+  geom_smooth(method=lm,se=TRUE,fullrange=TRUE)+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Converted)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
 # App made for our project
 
 ```{r}
