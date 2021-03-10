@@ -513,26 +513,23 @@ ggcorr(xsectional, label = TRUE, label_size = 3)+
   #geom_tile(label = TRUE)
 ```
 ```{r}
-l_cor <- longitudinal %>% 
-  select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
-  na.exclude
-ggpairs(l_cor, title="correlogram with ggpairs()", size = 10) 
-```
-
-```{r}
-?ggpairs
-```
-
-```{r}
-xsec_cor <- xsectional %>% 
-  select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
-  na.exclude
-ggpairs(xsec_cor, title="correlogram with ggpairs()") 
+# l_cor <- longitudinal %>% 
+#   select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
+#   na.exclude
+# ggpairs(l_cor, title="correlogram with ggpairs()", size = 10) 
 ```
 
 
 ```{r}
-pairs(l_cor[1:8], pch = 20, lower.panel = NULL)
+# xsec_cor <- xsectional %>% 
+#   select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
+#   na.exclude
+# ggpairs(xsec_cor, title="correlogram with ggpairs()") 
+```
+
+
+```{r}
+# pairs(l_cor[1:8], pch = 20, lower.panel = NULL)
 
 ```
 
