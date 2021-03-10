@@ -18,8 +18,8 @@ ui <- dashboardPage(skin = "red",
   fluidPage(
   selectInput("nWBVMin", "Lower bound of normalized brain volume on first visit", choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82")),
   selectInput("nWBVMax", "Upper bound of normalized brain volume on first visit",    choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82","0.84")),
-  selectInput("AgeMin", "Select Age Min", choices = c("50", "60", "70", "80")),
-  selectInput("AgeMax", "Select Age Max", choices = c("50", "60", "70", "80", "90")),
+  selectInput("AgeMin", "Select Minimum age", choices = c("50", "60", "70", "80")),
+  selectInput("AgeMax", "Select Maximum age", choices = c("50", "60", "70", "80", "90")),
   
   textOutput("result")
   
