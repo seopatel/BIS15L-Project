@@ -23,7 +23,7 @@ library(tidyverse)
 
 ```
 ## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-## ✓ tibble  3.0.6     ✓ dplyr   1.0.4
+## ✓ tibble  3.1.0     ✓ dplyr   1.0.4
 ## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
 ## ✓ readr   1.4.0     ✓ forcats 0.5.1
 ```
@@ -62,6 +62,21 @@ library(here)
 ```r
 library("RColorBrewer")
 library("paletteer")
+library(viridis)
+```
+
+```
+## Loading required package: viridisLite
+```
+
+```r
+library(GGally)
+```
+
+```
+## Registered S3 method overwritten by 'GGally':
+##   method from   
+##   +.gg   ggplot2
 ```
 
 
@@ -293,7 +308,7 @@ age_xsectional <- xsectional %>%
 age_xsectional+facet_wrap(~educ) +
   theme(axis.text.x = element_text(angle=60, hjust=1), plot.title = element_text(size = rel(1), hjust = 0.5))+
   scale_fill_brewer(palette = "Set1")+
-  labs(title = "Age Facet Wrap", x= "Age")
+  labs(title = "EDUC Facet Wrap", x= "Age")
 ```
 
 ![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
@@ -330,32 +345,121 @@ educ_long
 ![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 
+```r
+e_tiv_xsec <- xsectional %>% 
+  filter(age!='NA' | e_tiv!='NA') %>% 
+  ggplot(aes(x=age, y=e_tiv, color=n_wbv))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "B")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Estimated Total Intracranial Volume", x= "Age", y="Estimated Total Intracranial Volume")
+e_tiv_xsec
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
+
+
 
 ```r
 n_wbv_xsectional <- xsectional %>% 
   filter(age!='NA' | n_wbv!='NA') %>% 
-  ggplot(aes(x=age, y=n_wbv))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=n_wbv, fill = n_wbv))+
+  scale_fill_viridis(option = "D")+
+  geom_col(alpha=0.7)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
   labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
 n_wbv_xsectional
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+
+```r
+n_wbv_xsectional <- xsectional %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  ggplot(aes(x=age, y=n_wbv, color = cdr))+
+  scale_color_viridis(option = "B")+
+  geom_smooth(method = "lm")+
+  geom_point()+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_xsectional
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+
+
 
 ```r
 n_wbv_long <- longitudinal %>% 
   filter(age!='NA' | n_wbv!='NA') %>% 
-  ggplot(aes(x=age, y=n_wbv, fill=group))+
-  geom_col(alpha=0.5)+
+  filter(group == "Converted") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
-  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+  labs(title = "Distribution of Normalized Whole Brain Volume in Converted Patients", x= "Age", y="Normalized Whole Brain Volume")
 n_wbv_long
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+
+```r
+n_wbv_long <- longitudinal %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  filter(group == "Demented") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Normalized Whole Brain Volume in Demented Patients", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_long
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+
+```r
+n_wbv_long <- longitudinal %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  filter(group == "Nondemented") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Normalized Whole Brain Volume in Nondemented Patients", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_long
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 
 ```r
@@ -369,25 +473,27 @@ e_tiv_xsectional <- xsectional %>%
 e_tiv_xsectional
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 ```r
 e_tiv_long <- longitudinal %>% 
   filter(age!='NA' | e_tiv!='NA') %>% 
   ggplot(aes(x=age, y=e_tiv, fill=group))+
   geom_col(alpha=0.5)+
+  scale_fill_viridis(discrete = TRUE, option = "B")+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   labs(title = "Distribution of Estimated Total Intracranial Volume", x= "Age", y="Estimated Total Intracranial Volume")
 e_tiv_long
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 ```r
 ses_xsectional <- xsectional %>% 
   filter(age!='NA' | ses!='NA') %>% 
-  ggplot(aes(x=age, y=ses))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=ses, color = educ))+
+  geom_point(alpha=0.5)+
+  scale_color_viridis(option = "D")+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
   labs(title = "Distribution of Socioeconomic Status", x= "Age", y="Socioeconomic Status")
@@ -395,10 +501,28 @@ ses_xsectional
 ```
 
 ```
-## Warning: Removed 220 rows containing missing values (position_stack).
+## Warning: Removed 220 rows containing missing values (geom_point).
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+
+```r
+ses_xsectional <- xsectional %>% 
+  filter(age!='NA' | ses!='NA') %>% 
+  ggplot(aes(x=ses, y=educ, color = educ))+
+  geom_point(alpha=0.5)+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Socioeconomic Status", x= "EDUC", y="Socioeconomic Status")
+ses_xsectional
+```
+
+```
+## Warning: Removed 220 rows containing missing values (geom_point).
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 
 
@@ -408,7 +532,6 @@ ses_long <- longitudinal %>%
   ggplot(aes(x=age, y=ses, fill=group))+
   geom_col(alpha=0.5)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
-  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
   labs(title = "Distribution of Socioeconomic Status", x= "Age", y="Socioeconomic Status")
 ses_long
 ```
@@ -417,7 +540,7 @@ ses_long
 ## Warning: Removed 19 rows containing missing values (position_stack).
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
 
 
 ```r
@@ -426,11 +549,11 @@ asf_xsectional <- xsectional %>%
   ggplot(aes(x=age, y=asf))+
   geom_col(alpha=0.5)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
-  labs(title = "Distribution of Atlas Scalinf Factor", x= "Age", y="Atlas Scaling Factor")
+  labs(title = "Distribution of Atlas Scaling Factor", x= "Age", y="Atlas Scaling Factor")
 asf_xsectional
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 
 
@@ -440,30 +563,163 @@ asf_xsectional
 ```r
 asf_long <- longitudinal %>% 
   filter(age!='NA' | asf!='NA') %>% 
-  ggplot(aes(x=age, y=asf, fill=group))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=asf, color=group))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm", se = FALSE)+
+  scale_color_viridis(option = "D", discrete = TRUE)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
-  labs(title = "Distribution of Atlas Scalinf Factor", x= "Age", y="Atlas Scaling Factor")
+  labs(title = "Distribution of Atlas Scaling Factor", x= "Age", y="Atlas Scaling Factor")
 asf_long
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
 
 ```r
 mmse_xsectional <- xsectional %>% 
   filter(age!='NA' | mmse!='NA') %>% 
+  group_by(age) %>% 
+  mutate(mean_mmse = mean(mmse)) %>% 
   ggplot(aes(x=age, y=mmse))+
-  geom_col(alpha=0.5)+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm", se = FALSE)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   labs(title = "Distribution of Mini-Mental State Examination", x= "Age", y="Mini-Mental State Examination")
 mmse_xsectional
 ```
 
 ```
-## Warning: Removed 201 rows containing missing values (position_stack).
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+```
+## Warning: Removed 201 rows containing non-finite values (stat_smooth).
+```
+
+```
+## Warning: Removed 201 rows containing missing values (geom_point).
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
+
+```r
+head(mmse_xsectional)
+```
+
+```
+## $data
+## # A tibble: 436 x 14
+## # Groups:   age [73]
+##    id          m_f   hand    age  educ   ses  mmse   cdr e_tiv n_wbv   asf delay
+##    <chr>       <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <chr>
+##  1 OAS1_0001_… F     R        74     2     3    29   0    1344 0.743  1.31 N/A  
+##  2 OAS1_0002_… F     R        55     4     1    29   0    1147 0.81   1.53 N/A  
+##  3 OAS1_0003_… F     R        73     4     3    27   0.5  1454 0.708  1.21 N/A  
+##  4 OAS1_0004_… M     R        28    NA    NA    NA  NA    1588 0.803  1.10 N/A  
+##  5 OAS1_0005_… M     R        18    NA    NA    NA  NA    1737 0.848  1.01 N/A  
+##  6 OAS1_0006_… F     R        24    NA    NA    NA  NA    1131 0.862  1.55 N/A  
+##  7 OAS1_0007_… M     R        21    NA    NA    NA  NA    1516 0.83   1.16 N/A  
+##  8 OAS1_0009_… F     R        20    NA    NA    NA  NA    1505 0.843  1.17 N/A  
+##  9 OAS1_0010_… M     R        74     5     2    30   0    1636 0.689  1.07 N/A  
+## 10 OAS1_0011_… F     R        52     3     2    30   0    1321 0.827  1.33 N/A  
+## # … with 426 more rows, and 2 more variables: mean_mmse <dbl>, .group <int>
+## 
+## $layers
+## $layers[[1]]
+## geom_point: na.rm = FALSE, alpha = 0.5
+## stat_identity: na.rm = FALSE
+## position_identity 
+## 
+## $layers[[2]]
+## geom_smooth: na.rm = FALSE, orientation = NA, se = FALSE, flipped_aes = FALSE
+## stat_smooth: na.rm = FALSE, orientation = NA, se = FALSE, method = lm
+## position_identity 
+## 
+## 
+## $scales
+## <ggproto object: Class ScalesList, gg>
+##     add: function
+##     clone: function
+##     find: function
+##     get_scales: function
+##     has_scale: function
+##     input: function
+##     n: function
+##     non_position_scales: function
+##     scales: list
+##     super:  <ggproto object: Class ScalesList, gg>
+## 
+## $mapping
+## Aesthetic mapping: 
+## * `x` -> `age`
+## * `y` -> `mmse`
+## 
+## $theme
+## $theme$axis.text.x
+## List of 11
+##  $ family       : NULL
+##  $ face         : NULL
+##  $ colour       : NULL
+##  $ size         : num 8
+##  $ hjust        : num 1
+##  $ vjust        : NULL
+##  $ angle        : num 60
+##  $ lineheight   : NULL
+##  $ margin       : NULL
+##  $ debug        : NULL
+##  $ inherit.blank: logi FALSE
+##  - attr(*, "class")= chr [1:2] "element_text" "element"
+## 
+## $theme$plot.title
+## List of 11
+##  $ family       : NULL
+##  $ face         : NULL
+##  $ colour       : NULL
+##  $ size         : 'rel' num 1
+##  $ hjust        : num 0.5
+##  $ vjust        : NULL
+##  $ angle        : NULL
+##  $ lineheight   : NULL
+##  $ margin       : NULL
+##  $ debug        : NULL
+##  $ inherit.blank: logi FALSE
+##  - attr(*, "class")= chr [1:2] "element_text" "element"
+## 
+## attr(,"complete")
+## [1] FALSE
+## attr(,"validate")
+## [1] TRUE
+## 
+## $coordinates
+## <ggproto object: Class CoordCartesian, Coord, gg>
+##     aspect: function
+##     backtransform_range: function
+##     clip: on
+##     default: TRUE
+##     distance: function
+##     expand: TRUE
+##     is_free: function
+##     is_linear: function
+##     labels: function
+##     limits: list
+##     modify_scales: function
+##     range: function
+##     render_axis_h: function
+##     render_axis_v: function
+##     render_bg: function
+##     render_fg: function
+##     setup_data: function
+##     setup_layout: function
+##     setup_panel_guides: function
+##     setup_panel_params: function
+##     setup_params: function
+##     train_panel_guides: function
+##     transform: function
+##     super:  <ggproto object: Class CoordCartesian, Coord, gg>
+```
 
 
 
@@ -471,18 +727,28 @@ mmse_xsectional
 mmse_long <- longitudinal %>% 
   group_by(subject_id) %>% 
   filter(age!='NA' | mmse!='NA') %>% 
-  ggplot(aes(x=age, y=mmse, fill=group))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=mmse, color=group))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm", se = FALSE)+
+  scale_color_viridis(option = "D", discrete = TRUE)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   labs(title = "Distribution of Mini-Mental State Examination", x= "Age", y="Mini-Mental State Examination")
 mmse_long
 ```
 
 ```
-## Warning: Removed 2 rows containing missing values (position_stack).
+## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+```
+## Warning: Removed 2 rows containing non-finite values (stat_smooth).
+```
+
+```
+## Warning: Removed 2 rows containing missing values (geom_point).
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
 
 
 
@@ -497,7 +763,7 @@ age_long <- longitudinal %>%
 age_long
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-34-1.png)<!-- -->
 
 ```r
 age_long <- longitudinal %>% 
@@ -510,7 +776,7 @@ age_long <- longitudinal %>%
 age_long
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-35-1.png)<!-- -->
 
 ```r
 age_long <- longitudinal %>% 
@@ -523,5 +789,246 @@ age_long <- longitudinal %>%
 age_long
 ```
 
-![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-36-1.png)<!-- -->
+
+```r
+age_long <- longitudinal %>% 
+  filter(age!='NA' | group!='NA') %>%  
+  filter(group=="Converted") %>% 
+  ggplot(aes(x=age, fill=group))+
+  geom_bar(alpha=0.5)+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Group", x= "Age")
+age_long
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-37-1.png)<!-- -->
+
+
+
+
+COUNT Graphs
+**AGE**
+
+```r
+xsectional %>% 
+  ggplot(aes(x=age, fill= "red", alpha= 0.5))+
+  geom_bar()+
+  labs(title="Cross-Sectional Age Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-39-1.png)<!-- -->
+
+```r
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=age, fill= age, alpha = 0.5))+
+  geom_bar()+
+  labs(title="Longitudinal Age Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-39-2.png)<!-- -->
+**SES**
+
+```r
+xsectional %>% 
+  ggplot(aes(x=ses, fill="blue", alpha = 0.7))+
+  geom_bar()+
+  labs(title="Cross-Sectional Socioeconomic Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+```
+## Warning: Removed 220 rows containing non-finite values (stat_count).
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-40-1.png)<!-- -->
+
+```r
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=as.factor(ses), fill=as.factor(ses), alpha = 0.7))+
+  geom_bar()+
+  labs(title="Longitudinal Socioeconomic Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-40-2.png)<!-- -->
+
+**Sex**
+
+```r
+xsectional %>% 
+  ggplot(aes(x=m_f, fill = "red", alpha = 0.5))+
+  geom_bar()+
+  labs(title="Cross-Sectional Sex Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-41-1.png)<!-- -->
+
+```r
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=m_f, fill = m_f, alpha = 0.5))+
+  geom_bar()+
+  labs(title="Longitudinal Sex Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-41-2.png)<!-- -->
+**Education**
+
+```r
+xsectional %>% 
+  ggplot(aes(x=educ, fill = "red", alpha = 0.5))+
+  geom_bar()+
+   labs(title="Cross-Sectional Education Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+```
+## Warning: Removed 201 rows containing non-finite values (stat_count).
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-42-1.png)<!-- -->
+
+```r
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=educ, fill = , alpha=0.5))+
+  geom_bar()+
+   labs(title="Longitudinal Education Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-42-2.png)<!-- -->
+
+```r
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=group, fill = group, alpha=0.5))+
+  geom_bar()+
+  scale_color_viridis(option = "B")+
+   labs(title="Longitudinal Dementia Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-43-1.png)<!-- -->
+
+
+
+
+```r
+#install.packages("ggcorrplot")
+library(ggcorrplot)
+library(ggplot2)
+#install.packages("GGally")
+library("GGally")
+```
+
+```r
+#install.packages("viridis")
+library(viridis)
+```
+
+**Correlation plot**
+
+```r
+ggcorr(longitudinal, label = TRUE, label_size = 3, size = 4, hjust = 0.75)+
+  labs(title="Longitudinal Correlation Plot")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```
+## Warning in ggcorr(longitudinal, label = TRUE, label_size = 3, size = 4, : data
+## in column(s) 'subject_id', 'mri_id', 'group', 'm_f', 'hand', 'age' are not
+## numeric and were ignored
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-46-1.png)<!-- -->
+
+```r
+ggcorr(xsectional, label = TRUE, label_size = 3)+
+  labs(title="Cross-Sectional Correlation Plot")+
+  theme(plot.title = element_text(hjust = .5))
+```
+
+```
+## Warning in ggcorr(xsectional, label = TRUE, label_size = 3): data in column(s)
+## 'id', 'm_f', 'hand', 'delay' are not numeric and were ignored
+```
+
+![](BIS15L-Project_Seona-_files/figure-html/unnamed-chunk-46-2.png)<!-- -->
+
+```r
+?ggcorr
+```
+
+
+```r
+#long_cor <- longitudinal %>% 
+#  select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf)
+#long_cor <- round(cor(long_cor), 2)
+#head(long_cor)
+```
+
+```r
+#library(reshape2)
+#melted_long <- melt(long_cor)
+#head(melted_long)
+#ggplot(data = melted_long, aes(x=Var1, y=Var2, fill=value)) + 
+  #geom_tile(label = TRUE)
+```
+
+```r
+# l_cor <- longitudinal %>% 
+#   select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
+#   na.exclude
+# ggpairs(l_cor, title="correlogram with ggpairs()", size = 10) 
+```
+
+
+
+```r
+# xsec_cor <- xsectional %>% 
+#   select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
+#   na.exclude
+# ggpairs(xsec_cor, title="correlogram with ggpairs()") 
+```
+
+
+
+```r
+# pairs(l_cor[1:8], pch = 20, lower.panel = NULL)
+```
 

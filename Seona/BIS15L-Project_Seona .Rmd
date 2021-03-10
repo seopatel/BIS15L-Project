@@ -22,6 +22,8 @@ library(janitor)
 library(here)
 library("RColorBrewer")
 library("paletteer")
+library(viridis)
+library(GGally)
 ```
 
 ```{r}
@@ -131,25 +133,82 @@ educ_long <- longitudinal %>%
 educ_long
 ```
 
+```{r}
+e_tiv_xsec <- xsectional %>% 
+  filter(age!='NA' | e_tiv!='NA') %>% 
+  ggplot(aes(x=age, y=e_tiv, color=n_wbv))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "B")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Estimated Total Intracranial Volume", x= "Age", y="Estimated Total Intracranial Volume")
+e_tiv_xsec
+```
+
+
 
 ```{r}
 n_wbv_xsectional <- xsectional %>% 
   filter(age!='NA' | n_wbv!='NA') %>% 
-  ggplot(aes(x=age, y=n_wbv))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=n_wbv, fill = n_wbv))+
+  scale_fill_viridis(option = "D")+
+  geom_col(alpha=0.7)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
   labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
 n_wbv_xsectional
 ```
 ```{r}
+n_wbv_xsectional <- xsectional %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  ggplot(aes(x=age, y=n_wbv, color = cdr))+
+  scale_color_viridis(option = "B")+
+  geom_smooth(method = "lm")+
+  geom_point()+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_xsectional
+```
+
+
+```{r}
 n_wbv_long <- longitudinal %>% 
   filter(age!='NA' | n_wbv!='NA') %>% 
-  ggplot(aes(x=age, y=n_wbv, fill=group))+
-  geom_col(alpha=0.5)+
+  filter(group == "Converted") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
-  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+  labs(title = "Distribution of Normalized Whole Brain Volume in Converted Patients", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_long
+```
+```{r}
+n_wbv_long <- longitudinal %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  filter(group == "Demented") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Normalized Whole Brain Volume in Demented Patients", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_long
+```
+```{r}
+n_wbv_long <- longitudinal %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  filter(group == "Nondemented") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Normalized Whole Brain Volume in Nondemented Patients", x= "Age", y="Normalized Whole Brain Volume")
 n_wbv_long
 ```
 
@@ -168,6 +227,7 @@ e_tiv_long <- longitudinal %>%
   filter(age!='NA' | e_tiv!='NA') %>% 
   ggplot(aes(x=age, y=e_tiv, fill=group))+
   geom_col(alpha=0.5)+
+  scale_fill_viridis(discrete = TRUE, option = "B")+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   labs(title = "Distribution of Estimated Total Intracranial Volume", x= "Age", y="Estimated Total Intracranial Volume")
 e_tiv_long
@@ -175,11 +235,23 @@ e_tiv_long
 ```{r}
 ses_xsectional <- xsectional %>% 
   filter(age!='NA' | ses!='NA') %>% 
-  ggplot(aes(x=age, y=ses))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=ses, color = educ))+
+  geom_point(alpha=0.5)+
+  scale_color_viridis(option = "D")+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
   labs(title = "Distribution of Socioeconomic Status", x= "Age", y="Socioeconomic Status")
+ses_xsectional
+```
+```{r}
+ses_xsectional <- xsectional %>% 
+  filter(age!='NA' | ses!='NA') %>% 
+  ggplot(aes(x=ses, y=educ, color = educ))+
+  geom_point(alpha=0.5)+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Socioeconomic Status", x= "EDUC", y="Socioeconomic Status")
 ses_xsectional
 ```
 
@@ -190,7 +262,6 @@ ses_long <- longitudinal %>%
   ggplot(aes(x=age, y=ses, fill=group))+
   geom_col(alpha=0.5)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
-  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
   labs(title = "Distribution of Socioeconomic Status", x= "Age", y="Socioeconomic Status")
 ses_long
 ```
@@ -201,7 +272,7 @@ asf_xsectional <- xsectional %>%
   ggplot(aes(x=age, y=asf))+
   geom_col(alpha=0.5)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
-  labs(title = "Distribution of Atlas Scalinf Factor", x= "Age", y="Atlas Scaling Factor")
+  labs(title = "Distribution of Atlas Scaling Factor", x= "Age", y="Atlas Scaling Factor")
 asf_xsectional
 ```
 
@@ -212,20 +283,28 @@ asf_xsectional
 ```{r}
 asf_long <- longitudinal %>% 
   filter(age!='NA' | asf!='NA') %>% 
-  ggplot(aes(x=age, y=asf, fill=group))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=asf, color=group))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm", se = FALSE)+
+  scale_color_viridis(option = "D", discrete = TRUE)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
-  labs(title = "Distribution of Atlas Scalinf Factor", x= "Age", y="Atlas Scaling Factor")
+  labs(title = "Distribution of Atlas Scaling Factor", x= "Age", y="Atlas Scaling Factor")
 asf_long
 ```
 ```{r}
 mmse_xsectional <- xsectional %>% 
   filter(age!='NA' | mmse!='NA') %>% 
+  group_by(age) %>% 
+  mutate(mean_mmse = mean(mmse)) %>% 
   ggplot(aes(x=age, y=mmse))+
-  geom_col(alpha=0.5)+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm", se = FALSE)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   labs(title = "Distribution of Mini-Mental State Examination", x= "Age", y="Mini-Mental State Examination")
 mmse_xsectional
+```
+```{r}
+head(mmse_xsectional)
 ```
 
 
@@ -233,8 +312,10 @@ mmse_xsectional
 mmse_long <- longitudinal %>% 
   group_by(subject_id) %>% 
   filter(age!='NA' | mmse!='NA') %>% 
-  ggplot(aes(x=age, y=mmse, fill=group))+
-  geom_col(alpha=0.5)+
+  ggplot(aes(x=age, y=mmse, color=group))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm", se = FALSE)+
+  scale_color_viridis(option = "D", discrete = TRUE)+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   labs(title = "Distribution of Mini-Mental State Examination", x= "Age", y="Mini-Mental State Examination")
 mmse_long
@@ -301,7 +382,7 @@ xsectional %>%
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=age, fill= "blue", alpha = 0.5))+
+  ggplot(aes(x=age, fill= age, alpha = 0.5))+
   geom_bar()+
   labs(title="Longitudinal Age Distribution",
        x=NULL,
@@ -322,7 +403,7 @@ xsectional %>%
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=ses, fill="blue", alpha = 0.7))+
+  ggplot(aes(x=as.factor(ses), fill=as.factor(ses), alpha = 0.7))+
   geom_bar()+
   labs(title="Longitudinal Socioeconomic Status Distribution",
        x=NULL,
@@ -344,7 +425,7 @@ xsectional %>%
 
 longitudinal %>% 
   group_by("subject_id") %>% 
-  ggplot(aes(x=m_f, fill = "red", alpha = 0.5))+
+  ggplot(aes(x=m_f, fill = m_f, alpha = 0.5))+
   geom_bar()+
   labs(title="Longitudinal Sex Distribution",
        x=NULL,
@@ -379,6 +460,7 @@ longitudinal %>%
   group_by("subject_id") %>% 
   ggplot(aes(x=group, fill = group, alpha=0.5))+
   geom_bar()+
+  scale_color_viridis(option = "B")+
    labs(title="Longitudinal Dementia Status Distribution",
        x=NULL,
        y="Count")+
@@ -395,32 +477,59 @@ library(ggplot2)
 #install.packages("GGally")
 library("GGally")
 ```
-
+```{r}
+#install.packages("viridis")
+library(viridis)
+```
 
 **Correlation plot**
 ```{r}
-ggcorr(longitudinal)+
+ggcorr(longitudinal, label = TRUE, label_size = 3, size = 4, hjust = 0.75)+
   labs(title="Longitudinal Correlation Plot")+
-  theme(plot.title = element_text(hjust = .5))
+  theme(plot.title = element_text(hjust = 0.5))
+  
 
-ggcorr(xsectional)+
-   labs(title="Cross-Sectional Correlation Plot")+
+
+
+ggcorr(xsectional, label = TRUE, label_size = 3)+
+  labs(title="Cross-Sectional Correlation Plot")+
   theme(plot.title = element_text(hjust = .5))
+```
+```{r}
+?ggcorr
 ```
 
 ```{r}
-df_cross <- xsectional
-df_long <- longitudinal
-glimpse(df_cross)
+#long_cor <- longitudinal %>% 
+#  select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf)
+#long_cor <- round(cor(long_cor), 2)
+#head(long_cor)
 ```
 ```{r}
-df_cross <- df_cross %>%
-  select(-c("id", "hand", "delay"))
-colnames(df_cross)[3] <- "educ"
-df_cross <- df_cross[complete.cases(df_cross),]
-df_long <- df_long %>%
-  select(-c(subject_id, mri_id, hand, visit, mr_delay, group))
-df <- rbind(df_cross,df_long)
-glimpse(df)
+#library(reshape2)
+#melted_long <- melt(long_cor)
+#head(melted_long)
+#ggplot(data = melted_long, aes(x=Var1, y=Var2, fill=value)) + 
+  #geom_tile(label = TRUE)
+```
+```{r}
+# l_cor <- longitudinal %>% 
+#   select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
+#   na.exclude
+# ggpairs(l_cor, title="correlogram with ggpairs()", size = 10) 
+```
+
+
+```{r}
+# xsec_cor <- xsectional %>% 
+#   select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
+#   na.exclude
+# ggpairs(xsec_cor, title="correlogram with ggpairs()") 
+```
+
+
+```{r}
+# pairs(l_cor[1:8], pch = 20, lower.panel = NULL)
+
 ```
 
