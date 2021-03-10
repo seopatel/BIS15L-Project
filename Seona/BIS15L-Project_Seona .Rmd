@@ -500,18 +500,17 @@ ggcorr(xsectional, label = TRUE, label_size = 3)+
 ```
 
 ```{r}
-long_cor <- longitudinal %>% 
-  select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf) %>% 
-  na.exclude
-long_cor <- round(cor(long_cor), 2)
-head(long_cor)
+#long_cor <- longitudinal %>% 
+#  select(age, educ, ses, mmse, cdr, e_tiv, n_wbv, asf)
+#long_cor <- round(cor(long_cor), 2)
+#head(long_cor)
 ```
 ```{r}
-library(reshape2)
-melted_long <- melt(long_cor)
-head(melted_long)
-ggplot(data = melted_long, aes(x=Var1, y=Var2, fill=value)) + 
-  geom_tile(label = TRUE)
+#library(reshape2)
+#melted_long <- melt(long_cor)
+#head(melted_long)
+#ggplot(data = melted_long, aes(x=Var1, y=Var2, fill=value)) + 
+  #geom_tile(label = TRUE)
 ```
 ```{r}
 l_cor <- longitudinal %>% 
