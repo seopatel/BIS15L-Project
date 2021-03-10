@@ -1,6 +1,8 @@
 ---
 title: "BIS15L Final Project Group 9"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -8,12 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-##BIS15L Final Project Group 9
-
 In this project, we are using data from the Open Access Series of Imaging Studies (OASIS), made available by the Washingtom UNiversity Alzheimer's Disease Research Center, Dr. Randy Buckner at the Howard Hughes Medical Institute (HHMI), the Neuroinformatics Research Group (NRG) at Washington University School of Medicine, and the Biomedical Informatics Research Network (BIRN). Our datasets were found on kaggle: [MRI and Alzheimer's Disease](https://www.kaggle.com/jboysen/mri-and-alzheimers).
 
 
 Load libraries
+
 ```{r}
 library(tidyverse)
 library(RColorBrewer)
@@ -31,4 +32,192 @@ options(scipen=999)
 ```{r}
 longitudinal <- readr::read_csv("data/oasis_longitudinal.csv")
 xsectional <- readr::read_csv("data/oasis_cross-sectional.csv")
+```
+
+**Let's take a look at the data: **
+
+
+```{r}
+glimpse(longitudinal)
+summary(longitudinal)
+```
+
+```{r}
+glimpse(xsectional)
+summary(xsectional)
+```
+
+Clean Names
+
+```{r}
+longitudinal <- janitor::clean_names(longitudinal)
+xsectional <- janitor::clean_names(xsectional)
+```
+
+```{r}
+names(longitudinal)
+names(xsectional)
+```
+# Explanation of Datasets
+
+The **Longitudinal Dataset** includes data from 150 patients, aged 60-96 years old. Each subject received an MRI scan on two or more visits, separated by at least one year for a total of 373 imaging sessions. In this dataset, 72 patients were characterized as Nondemented, 64 were characterized as demented (with 51 subjects having mild to moderate dementia), and 14 were converted throughout the study.
+
+The **Cross Sectional Dataset** includes data from 416 subjects aged 18 to 96 years old. In this dataset, 100 subjects over the age of 60 were clinically diagnosed with very mild to moderate Alzheimer’s disease, and 20 nondemented subjects were used as a control in the study.
+
+
+# Explanation of Variables
+**CDR** - Clinical Dementia Rating - Used to group patients based on the severity of dementia (0 = no dementia, 0.5 = very mild AD, 1 = mild AD, 2 = moderate AD)
+
+**eTIV** - Estimated Total Intracranial Volume 
+
+**nWBV** - Normalized Whole Brain Volume - as measured by mRI
+
+**ASF** - Atlas Scaling Factor - factor that allows for comparison of estimated total intracranial volume based on differences in human anatomy
+
+**MR Delay** - Time between appointments
+
+**Group** - demented/nondemented/converted (Coverted means that they did not have dementia at their first visit to the doctor, but was diagnosed with dementia at a subsequent visit during the study).
+
+**Hand** - All patients are right handed
+
+**Age** - Age in years 
+
+**EDUC** - Education Status (measured in years)
+
+**SES** - socioeconomic status as measured by the Hollingshead Index of Social Position, where 1 = highest status and 5 = lowest status
+
+
+
+# Cursory Analysis of the data: 
+
+
+### Age Distribution Plots of Both Datasets
+```{r}
+xsectional %>% 
+  ggplot(aes(x=age, fill= as.factor(age), alpha= 0.5))+
+  geom_bar()+
+  labs(title="Cross-Sectional Age Distribution",
+       x="Age",
+       y="Count")+
+  scale_fill_viridis(option = "C", discrete = TRUE)+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 7, ), plot.title = element_text(hjust = .5), legend.position = "none")
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=age, fill= as.factor(age), alpha = 0.5))+
+  geom_bar()+
+  labs(title="Longitudinal Age Distribution",
+       x="Age",
+       y="Count")+
+  scale_fill_viridis(option = "D", discrete = TRUE)+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+### Socioeconomic Status Distribution Plots of Both Datasets
+
+```{r}
+xsectional %>% 
+  ggplot(aes(x=ses, fill=as.factor(ses), alpha = 0.7))+
+  geom_bar()+
+  labs(title="Cross-Sectional Socioeconomic Status Distribution",
+       x="Socioeconomic Status",
+       y="Count")+
+  theme_classic()+
+  scale_fill_viridis(option = "C", discrete = TRUE)+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  filter(ses != "NA") %>% 
+  ggplot(aes(x=as.factor(ses), fill=as.factor(ses), alpha = 0.7))+
+  geom_bar()+
+  labs(title="Longitudinal Socioeconomic Status Distribution",
+       x="Socioeconomic Status",
+       y="Count")+
+  theme_classic()+
+  scale_fill_viridis(option = "D", discrete = TRUE)+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+
+### Sex Distribution Plots of Both Datasets
+
+```{r}
+xsectional %>%
+  ggplot(aes(x=m_f, fill = m_f, alpha = 0.5))+
+  geom_bar()+
+  labs(title="Cross-Sectional Sex Distribution",
+       x="Sex",
+       y="Count")+
+  theme_classic()+
+  scale_fill_viridis(option = "C", discrete = TRUE)+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=m_f, fill = m_f, alpha = 0.5))+
+  geom_bar()+
+  labs(title="Longitudinal Sex Distribution",
+       x="Sex",
+       y="Count")+
+  theme_classic()+
+  scale_fill_viridis(option = "D", discrete = TRUE)+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+### Education Status Distribution Plots of Both Datasets
+
+```{r}
+xsectional %>% 
+  ggplot(aes(x=educ, fill = as.factor(educ), alpha = 0.5))+
+  geom_bar()+
+   labs(title="Cross-Sectional Education Status Distribution",
+       x="Education Status",
+       y="Count")+
+  theme_classic()+
+  scale_fill_viridis(option = "C", discrete = TRUE)+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=educ, fill = as.factor(educ), alpha=0.5))+
+  geom_bar()+
+   labs(title="Longitudinal Education Status Distribution",
+       x="Education Status",
+       y="Count")+
+  theme_classic()+
+  scale_fill_viridis(option = "D", discrete = TRUE)+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+### Group Distribution Plot of Longitudinal Dataset
+
+```{r}
+longitudinal %>% 
+  group_by("subject_id") %>% 
+  ggplot(aes(x=group, fill = group, alpha=0.5))+
+  geom_bar()+
+   labs(title="Longitudinal Dementia Status Distribution",
+       x=NULL,
+       y="Count")+
+  theme_classic()+
+  scale_fill_viridis(option = "D", discrete = TRUE)+
+  theme(plot.title = element_text(hjust = .5), legend.position = "none")
+```
+
+### Correlation Plots of Both Datasets
+
+```{r}
+ggcorr(longitudinal, label = TRUE, label_size = 3, size = 4, hjust = 0.75)+
+  labs(title="Longitudinal Correlation Plot")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+  
+
+
+ggcorr(xsectional, label = TRUE, label_size = 3)+
+  labs(title="Cross-Sectional Correlation Plot")+
+  theme(plot.title = element_text(hjust = .5))
 ```

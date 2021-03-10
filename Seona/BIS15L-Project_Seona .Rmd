@@ -133,6 +133,19 @@ educ_long <- longitudinal %>%
 educ_long
 ```
 
+```{r}
+e_tiv_xsec <- xsectional %>% 
+  filter(age!='NA' | e_tiv!='NA') %>% 
+  ggplot(aes(x=age, y=e_tiv, color=n_wbv))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "B")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Estimated Total Intracranial Volume", x= "Age", y="Estimated Total Intracranial Volume")
+e_tiv_xsec
+```
+
+
 
 ```{r}
 n_wbv_xsectional <- xsectional %>% 
@@ -146,14 +159,56 @@ n_wbv_xsectional <- xsectional %>%
 n_wbv_xsectional
 ```
 ```{r}
+n_wbv_xsectional <- xsectional %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  ggplot(aes(x=age, y=n_wbv, color = cdr))+
+  scale_color_viridis(option = "B")+
+  geom_smooth(method = "lm")+
+  geom_point()+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_xsectional
+```
+
+
+```{r}
 n_wbv_long <- longitudinal %>% 
   filter(age!='NA' | n_wbv!='NA') %>% 
-  ggplot(aes(x=age, y=n_wbv, fill=asf))+
-  geom_col(alpha=0.5)+
-  scale_fill_viridis(option = "D")+
+  filter(group == "Converted") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
   #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
-  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+  labs(title = "Distribution of Normalized Whole Brain Volume in Converted Patients", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_long
+```
+```{r}
+n_wbv_long <- longitudinal %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  filter(group == "Demented") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Normalized Whole Brain Volume in Demented Patients", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_long
+```
+```{r}
+n_wbv_long <- longitudinal %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  filter(group == "Nondemented") %>% 
+  ggplot(aes(x=age, y=n_wbv, color=cdr))+
+  geom_point(alpha=0.5)+
+  geom_smooth(method = "lm")+
+  scale_color_viridis(option = "D")+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  #scale_x_discrete(breaks=c(20, 30, 40, 50, 60, 70, 80, 90))+
+  labs(title = "Distribution of Normalized Whole Brain Volume in Nondemented Patients", x= "Age", y="Normalized Whole Brain Volume")
 n_wbv_long
 ```
 
@@ -476,19 +531,9 @@ xsec_cor <- xsectional %>%
 ggpairs(xsec_cor, title="correlogram with ggpairs()") 
 ```
 
+
 ```{r}
-df_cross <- xsectional
-df_long <- longitudinal
-glimpse(df_cross)
-glimpse(df_long)
+pairs(l_cor[1:8], pch = 20, lower.panel = NULL)
+
 ```
-```{r}
-df_cross <- df_cross %>%
-  select(-c("id", "hand", "delay"))
-#colnames(df_cross)[3] <- "educ"
-df_cross <- df_cross[complete.cases(df_cross),]
-df_long <- df_long %>%
-  select(-c(subject_id, mri_id, hand, visit, mr_delay, group))
-df <- rbind(df_cross,df_long)
-glimpse(df)
-```
+
