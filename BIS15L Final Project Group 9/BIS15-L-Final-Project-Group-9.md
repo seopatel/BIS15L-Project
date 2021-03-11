@@ -341,7 +341,7 @@ xsectional %>%
   labs(title="Cross-Sectional Age Distribution",
        x="Age",
        y="Count")+
-  scale_fill_viridis(option = "C", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme_classic()+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 7, ), plot.title = element_text(hjust = .5), legend.position = "none")
 ```
@@ -356,7 +356,7 @@ longitudinal %>%
   labs(title="Longitudinal Age Distribution",
        x="Age",
        y="Count")+
-  scale_fill_viridis(option = "D", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme_classic()+
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(hjust = .5),legend.position = "none")
 ```
@@ -374,7 +374,7 @@ xsectional %>%
        x="Socioeconomic Status",
        y="Count")+
   theme_classic()+
-  scale_fill_viridis(option = "C", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
@@ -394,7 +394,7 @@ longitudinal %>%
        x="Socioeconomic Status",
        y="Count")+
   theme_classic()+
-  scale_fill_viridis(option = "D", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
@@ -412,7 +412,7 @@ xsectional %>%
        x="Sex",
        y="Count")+
   theme_classic()+
-  scale_fill_viridis(option = "C", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
@@ -427,7 +427,7 @@ longitudinal %>%
        x="Sex",
        y="Count")+
   theme_classic()+
-  scale_fill_viridis(option = "D", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
@@ -444,7 +444,7 @@ xsectional %>%
        x="Education Status",
        y="Count")+
   theme_classic()+
-  scale_fill_viridis(option = "C", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
@@ -463,7 +463,7 @@ longitudinal %>%
        x="Education Status",
        y="Count")+
   theme_classic()+
-  scale_fill_viridis(option = "D", discrete = TRUE)+
+  scale_fill_viridis(option = "B", discrete = TRUE)+
   theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
@@ -481,7 +481,7 @@ longitudinal %>%
        x=NULL,
        y="Count")+
   theme_classic()+
-  scale_fill_viridis(option = "D", discrete = TRUE)+
+  scale_fill_viridis(option = "C", discrete = TRUE)+
   theme(plot.title = element_text(hjust = .5), legend.position = "none")
 ```
 
