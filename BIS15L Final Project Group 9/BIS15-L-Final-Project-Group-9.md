@@ -7,8 +7,11 @@ output:
 
 
 
+# BIS15L Final Project Group 9
 
 In this project, we are using data from the Open Access Series of Imaging Studies (OASIS), made available by the Washingtom UNiversity Alzheimer's Disease Research Center, Dr. Randy Buckner at the Howard Hughes Medical Institute (HHMI), the Neuroinformatics Research Group (NRG) at Washington University School of Medicine, and the Biomedical Informatics Research Network (BIRN). Our datasets were found on kaggle: [MRI and Alzheimer's Disease](https://www.kaggle.com/jboysen/mri-and-alzheimers).
+
+The question we wanted to answer is "What are the differences in measured variables between Demented and Non-demented subjects and do they have any predictive value in the development of Alzheimer's Disease Dementia?"
 
 
 Load libraries
@@ -68,6 +71,22 @@ library(GGally)
 ## Registered S3 method overwritten by 'GGally':
 ##   method from   
 ##   +.gg   ggplot2
+```
+
+```r
+library(shiny)
+library(shinydashboard)
+```
+
+```
+## 
+## Attaching package: 'shinydashboard'
+```
+
+```
+## The following object is masked from 'package:graphics':
+## 
+##     box
 ```
 
 ```r
@@ -497,3 +516,284 @@ ggcorr(xsectional, label = TRUE, label_size = 3)+
 ```
 
 ![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-13-2.png)<!-- -->
+
+### How does normalized whole brain volume and CDR change with age?
+
+
+```r
+n_wbv_xsectional <- xsectional %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  ggplot(aes(x=age, y=n_wbv, color = cdr))+
+  scale_color_viridis(option = "B")+
+  geom_smooth(method = "lm")+
+  geom_point()+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_xsectional
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+### What is the relationship between CDR and Normalized Whole Brain Volume?
+
+
+
+```r
+xsectional %>% ##comparison of n_wbv between demented patients and age matched controls
+  group_by(as.factor(cdr)) %>% 
+  ggplot(aes(x=as.factor(cdr),y=n_wbv,group=as.factor(cdr),color=as.factor(cdr),fill=as.factor(cdr),alpha=.5))+
+  geom_boxplot()+
+  geom_jitter()+#Could Exclude
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")+
+  labs(title=" Normalized Whole Brain Volume vs Clinical Dementia Rating",
+       x="Clinical Dementia Rating",
+       y="Normalized Whole Brain Volume")+
+  scale_x_discrete(labels=c("NA" = "Young"))
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
+### What is the Distribution of Age within CDR groups?
+
+
+
+```r
+xsectional %>% #Violin comparison of Demented vs Nondemented and age
+  filter(cdr!="NA", age>60) %>% 
+  ggplot(aes(x = as.factor(cdr), y = age, group=cdr,color=as.factor(cdr))) + 
+  geom_violin(aes(fill = as.factor(cdr),alpha=.5)) + 
+  geom_boxplot(width = 0.2, alpha=1)+
+  theme_classic()+
+  labs(title="Age Distribution Between Groups",
+       x="CDR",
+       y="Age Distribution ")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+
+### Years of Education Between Groups
+
+
+```r
+longitudinal %>% #Comparison of education between demented participants and age matched controls
+  filter(age>60,group!="Converted",visit==1) %>% 
+  group_by(group) %>% 
+  ggplot(aes(x=group,y=educ,fill=group,color=group,alpha=.5))+
+  geom_boxplot()+
+  theme_classic()+
+  labs(title="Years of Education vs Dementia Status",
+       x=NULL,
+       y="Education")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")+
+  scale_x_discrete(labels=c("Nondemented" = "Non-Demented"))
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
+### SES Distribution Between Groups
+
+
+```r
+longitudinal %>% #Comparison of ses between demented participants and age matched controls
+  filter(age>60,group!="Converted",ses!="NA",visit==1) %>% 
+  group_by(group) %>% 
+  ggplot(aes(x=group,y=ses,fill=group,color=group,alpha=.5))+
+  geom_boxplot()+
+  labs(title="SES vs Dementia Status",
+       x=NULL,
+       y="SES")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")+
+  scale_x_discrete(labels=c("Nondemented" = "Non-Demented"))
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
+### How does normalized whole brain volume change over subsequent visits?
+
+
+
+```r
+longitudinal %>% #Comparison of MMSE and CDR
+  filter(visit==1 | visit==2,mmse!="NA") %>% 
+  mutate(cdr = as.factor(cdr)) %>%
+  ggplot(aes(cdr, mmse, fill = cdr,color=cdr))+
+  geom_boxplot(alpha = 0.5) +
+  geom_jitter(aes(color = cdr),alpha = 0.7)+
+  theme_classic()+
+  labs(title= "Mini-Mental State Examination",
+       x="Clinical Dementia Rating",
+       y="Mini-Mental State Examination")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+
+```r
+longitudinal %>% #Observing the change between visits in n_wbv of the Nondemented group
+  filter(group=="Nondemented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
+  geom_point()+
+  geom_line()+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Non-Demented|CDR=0)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+
+```r
+longitudinal %>% #Observing the change between visits in n_wbv of the Demented group
+  filter(group=="Demented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
+  geom_point()+
+  geom_line()+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Demented|CDR>0)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+
+```r
+longitudinal %>% #Observing the change between visits in n_wbv of the converted group
+  filter(group=="Converted") %>% 
+  ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
+  geom_point()+
+  geom_line()+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Converted)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+
+```r
+longitudinal %>% #Observing the change between visits in n_wbv of the Nondemented group with trend line
+  filter(group=="Nondemented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
+  geom_point()+
+  geom_smooth(method="lm",se=TRUE)+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Nondemented)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+
+```r
+longitudinal %>% #Observing the change between visits in n_wbv of the Demented  group with trand line
+  filter(group=="Demented") %>% 
+  ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
+  geom_point()+
+  geom_smooth(method=lm,se=TRUE,fullrange=TRUE)+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Demented)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+
+```r
+longitudinal %>% #Observing the change between visits in n_wbv of the converted group with trend line and standard error
+  filter(group=="Converted") %>% 
+  ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
+  geom_point()+
+  geom_smooth(method=lm,se=TRUE,fullrange=TRUE)+
+  theme_classic()+
+  labs(title="Change in Normalized Whole Brain Volume Over Time (Converted)",
+       x="Visit Number",
+       y="Normalized Whole Brain Volume")+
+  theme(plot.title = element_text(hjust = .5),legend.position = "none")
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+
+# App made for our project
+
+We wanted to show the proportions of each of the groups (Demented, Nondemented, Converted) that meet certain criteria. 
+
+
+```r
+ui <- fluidPage(
+    selectInput("nWBVMin", "Lower bound of normalized brain volume on first visit", choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82")),
+     selectInput("nWBVMax", "Upper bound of normalized brain volume on first visit",    choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82","0.84")),
+    selectInput("AgeMin", "Select Age Min", choices = c("50", "60", "70", "80")),
+    selectInput("AgeMax", "Select Age Max", choices = c("50", "60", "70", "80", "90")),
+                
+  textOutput("result")
+  
+)
+
+
+
+server <- function(input, output, session) {
+  
+
+  
+numpatients <-  reactive({longitudinal %>%
+    filter(visit==1) %>%
+    filter(n_wbv>=input$nWBVMin & n_wbv<= input$nWBVMax) %>%
+    filter(age>=input$AgeMin & age<= input$AgeMax)%>%
+    nrow()
+    })
+
+numdemented <-  reactive({longitudinal %>%
+    filter(visit==1) %>%
+    filter(n_wbv>=input$nWBVMin & n_wbv<= input$nWBVMax) %>%
+    filter(age>=input$AgeMin & age<= input$AgeMax) %>%
+    filter(group=='Demented' | group == 'Converted') %>%
+    nrow()
+    })
+  
+  output$result <- renderText({
+    c(numpatients(),"patients meet listed search criteria, out of which", numdemented(), "have dementia or approximately", round((numdemented()/numpatients())*100), "% of the sample")
+  })
+
+ 
+  
+  # stop the app when we close it
+  session$onSessionEnded(stopApp)
+}
+
+
+shinyApp(ui, server)
+```
+
+`<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>`{=html}
+
+### Conclusions
+
+There are differences in several key variables such as Socioeconomic Status, Normalized Whole Brain Volume, and Average Educational Attainment between Demented and Non-Demented Patient Groups. Furthermore, We found that converted patients had a similar rate of decline in Normalized Whole Brain Volume  to Demented Patients, suggesting the possible predictive value of rate of change of Normalized Whole Brain values over time.
+
+
+

@@ -9,8 +9,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# BIS15L Final Project Group 9
 
 In this project, we are using data from the Open Access Series of Imaging Studies (OASIS), made available by the Washingtom UNiversity Alzheimer's Disease Research Center, Dr. Randy Buckner at the Howard Hughes Medical Institute (HHMI), the Neuroinformatics Research Group (NRG) at Washington University School of Medicine, and the Biomedical Informatics Research Network (BIRN). Our datasets were found on kaggle: [MRI and Alzheimer's Disease](https://www.kaggle.com/jboysen/mri-and-alzheimers).
+
+The question we wanted to answer is "What are the differences in measured variables between Demented and Non-demented subjects and do they have any predictive value in the development of Alzheimer's Disease Dementia?"
 
 
 Load libraries
@@ -24,6 +27,7 @@ library(here)
 library(GGally)
 library(shiny)
 library(shinydashboard)
+library(viridis)
 ```
 
 ```{r}
@@ -222,6 +226,25 @@ ggcorr(xsectional, label = TRUE, label_size = 3)+
   labs(title="Cross-Sectional Correlation Plot")+
   theme(plot.title = element_text(hjust = .5))
 ```
+
+### How does normalized whole brain volume and CDR change with age?
+
+```{r}
+n_wbv_xsectional <- xsectional %>% 
+  filter(age!='NA' | n_wbv!='NA') %>% 
+  ggplot(aes(x=age, y=n_wbv, color = cdr))+
+  scale_color_viridis(option = "B")+
+  geom_smooth(method = "lm")+
+  geom_point()+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8), plot.title = element_text(size = rel(1), hjust = 0.5))+
+  labs(title = "Distribution of Normalized Whole Brain Volume", x= "Age", y="Normalized Whole Brain Volume")
+n_wbv_xsectional
+```
+
+### What is the relationship between CDR and Normalized Whole Brain Volume?
+
+
 ```{r}
 xsectional %>% ##comparison of n_wbv between demented patients and age matched controls
   group_by(as.factor(cdr)) %>% 
@@ -235,6 +258,10 @@ xsectional %>% ##comparison of n_wbv between demented patients and age matched c
        y="Normalized Whole Brain Volume")+
   scale_x_discrete(labels=c("NA" = "Young"))
 ```
+
+### What is the Distribution of Age within CDR groups?
+
+
 ```{r}
 xsectional %>% #Violin comparison of Demented vs Nondemented and age
   filter(cdr!="NA", age>60) %>% 
@@ -247,6 +274,9 @@ xsectional %>% #Violin comparison of Demented vs Nondemented and age
        y="Age Distribution ")+
   theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
+
+### Years of Education Between Groups
+
 ```{r}
 longitudinal %>% #Comparison of education between demented participants and age matched controls
   filter(age>60,group!="Converted",visit==1) %>% 
@@ -260,6 +290,9 @@ longitudinal %>% #Comparison of education between demented participants and age 
   theme(plot.title = element_text(hjust = .5),legend.position = "none")+
   scale_x_discrete(labels=c("Nondemented" = "Non-Demented"))
 ```
+
+### SES Distribution Between Groups
+
 ```{r}
 longitudinal %>% #Comparison of ses between demented participants and age matched controls
   filter(age>60,group!="Converted",ses!="NA",visit==1) %>% 
@@ -273,6 +306,10 @@ longitudinal %>% #Comparison of ses between demented participants and age matche
   theme(plot.title = element_text(hjust = .5),legend.position = "none")+
   scale_x_discrete(labels=c("Nondemented" = "Non-Demented"))
 ```
+
+### How does normalized whole brain volume change over subsequent visits?
+
+
 ```{r}
 longitudinal %>% #Comparison of MMSE and CDR
   filter(visit==1 | visit==2,mmse!="NA") %>% 
@@ -358,7 +395,10 @@ longitudinal %>% #Observing the change between visits in n_wbv of the converted 
        y="Normalized Whole Brain Volume")+
   theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
+
 # App made for our project
+
+We wanted to show the proportions of each of the groups (Demented, Nondemented, Converted) that meet certain criteria. 
 
 ```{r}
 ui <- fluidPage(
@@ -407,6 +447,10 @@ shinyApp(ui, server)
 
 
 ```
+
+### Conclusions
+
+There are differences in several key variables such as Socioeconomic Status, Normalized Whole Brain Volume, and Average Educational Attainment between Demented and Non-Demented Patient Groups. Furthermore, We found that converted patients had a similar rate of decline in Normalized Whole Brain Volume  to Demented Patients, suggesting the possible predictive value of rate of change of Normalized Whole Brain values over time.
 
 
 
