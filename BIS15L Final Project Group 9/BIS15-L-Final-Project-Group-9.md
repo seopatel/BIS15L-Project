@@ -22,18 +22,18 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
+## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
 ```
 
 ```
-## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
-## ✓ tibble  3.1.0     ✓ dplyr   1.0.4
-## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
-## ✓ readr   1.4.0     ✓ forcats 0.5.1
+## v ggplot2 3.3.3     v purrr   0.3.4
+## v tibble  3.1.0     v dplyr   1.0.4
+## v tidyr   1.1.2     v stringr 1.4.0
+## v readr   1.4.0     v forcats 0.5.1
 ```
 
 ```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -60,7 +60,7 @@ library(here)
 ```
 
 ```
-## here() starts at /Users/seonapatel/Desktop/GitHub/BIS15L-Project
+## here() starts at C:/Users/Sudev/Documents/GitHub/BISProject-Seona/BIS15L-Project
 ```
 
 ```r
@@ -109,7 +109,7 @@ longitudinal <- readr::read_csv("data/oasis_longitudinal.csv")
 
 ```
 ## 
-## ── Column specification ────────────────────────────────────────────────────────
+## -- Column specification --------------------------------------------------------
 ## cols(
 ##   `Subject ID` = col_character(),
 ##   `MRI ID` = col_character(),
@@ -135,7 +135,7 @@ xsectional <- readr::read_csv("data/oasis_cross-sectional.csv")
 
 ```
 ## 
-## ── Column specification ────────────────────────────────────────────────────────
+## -- Column specification --------------------------------------------------------
 ## cols(
 ##   ID = col_character(),
 ##   `M/F` = col_character(),
@@ -163,21 +163,21 @@ glimpse(longitudinal)
 ```
 ## Rows: 373
 ## Columns: 15
-## $ `Subject ID` <chr> "OAS2_0001", "OAS2_0001", "OAS2_0002", "OAS2_0002", "OAS2…
-## $ `MRI ID`     <chr> "OAS2_0001_MR1", "OAS2_0001_MR2", "OAS2_0002_MR1", "OAS2_…
-## $ Group        <chr> "Nondemented", "Nondemented", "Demented", "Demented", "De…
-## $ Visit        <dbl> 1, 2, 1, 2, 3, 1, 2, 1, 2, 3, 1, 3, 4, 1, 2, 1, 2, 1, 2, …
-## $ `MR Delay`   <dbl> 0, 457, 0, 560, 1895, 0, 538, 0, 1010, 1603, 0, 518, 1281…
-## $ `M/F`        <chr> "M", "M", "M", "M", "M", "F", "F", "M", "M", "M", "M", "M…
-## $ Hand         <chr> "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R…
-## $ Age          <dbl> 87, 88, 75, 76, 80, 88, 90, 80, 83, 85, 71, 73, 75, 93, 9…
-## $ EDUC         <dbl> 14, 14, 12, 12, 12, 18, 18, 12, 12, 12, 16, 16, 16, 14, 1…
-## $ SES          <dbl> 2, 2, NA, NA, NA, 3, 3, 4, 4, 4, NA, NA, NA, 2, 2, 2, 2, …
-## $ MMSE         <dbl> 27, 30, 23, 28, 22, 28, 27, 28, 29, 30, 28, 27, 27, 30, 2…
-## $ CDR          <dbl> 0.0, 0.0, 0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 1.…
-## $ eTIV         <dbl> 1987, 2004, 1678, 1738, 1698, 1215, 1200, 1689, 1701, 169…
-## $ nWBV         <dbl> 0.696, 0.681, 0.736, 0.713, 0.701, 0.710, 0.718, 0.712, 0…
-## $ ASF          <dbl> 0.883, 0.876, 1.046, 1.010, 1.034, 1.444, 1.462, 1.039, 1…
+## $ `Subject ID` <chr> "OAS2_0001", "OAS2_0001", "OAS2_0002", "OAS2_0002", "OAS2~
+## $ `MRI ID`     <chr> "OAS2_0001_MR1", "OAS2_0001_MR2", "OAS2_0002_MR1", "OAS2_~
+## $ Group        <chr> "Nondemented", "Nondemented", "Demented", "Demented", "De~
+## $ Visit        <dbl> 1, 2, 1, 2, 3, 1, 2, 1, 2, 3, 1, 3, 4, 1, 2, 1, 2, 1, 2, ~
+## $ `MR Delay`   <dbl> 0, 457, 0, 560, 1895, 0, 538, 0, 1010, 1603, 0, 518, 1281~
+## $ `M/F`        <chr> "M", "M", "M", "M", "M", "F", "F", "M", "M", "M", "M", "M~
+## $ Hand         <chr> "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R~
+## $ Age          <dbl> 87, 88, 75, 76, 80, 88, 90, 80, 83, 85, 71, 73, 75, 93, 9~
+## $ EDUC         <dbl> 14, 14, 12, 12, 12, 18, 18, 12, 12, 12, 16, 16, 16, 14, 1~
+## $ SES          <dbl> 2, 2, NA, NA, NA, 3, 3, 4, 4, 4, NA, NA, NA, 2, 2, 2, 2, ~
+## $ MMSE         <dbl> 27, 30, 23, 28, 22, 28, 27, 28, 29, 30, 28, 27, 27, 30, 2~
+## $ CDR          <dbl> 0.0, 0.0, 0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 1.~
+## $ eTIV         <dbl> 1987, 2004, 1678, 1738, 1698, 1215, 1200, 1689, 1701, 169~
+## $ nWBV         <dbl> 0.696, 0.681, 0.736, 0.713, 0.701, 0.710, 0.718, 0.712, 0~
+## $ ASF          <dbl> 0.883, 0.876, 1.046, 1.010, 1.034, 1.444, 1.462, 1.039, 1~
 ```
 
 ```r
@@ -227,18 +227,18 @@ glimpse(xsectional)
 ```
 ## Rows: 436
 ## Columns: 12
-## $ ID    <chr> "OAS1_0001_MR1", "OAS1_0002_MR1", "OAS1_0003_MR1", "OAS1_0004_MR…
-## $ `M/F` <chr> "F", "F", "F", "M", "M", "F", "M", "F", "M", "F", "M", "F", "F",…
-## $ Hand  <chr> "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R",…
-## $ Age   <dbl> 74, 55, 73, 28, 18, 24, 21, 20, 74, 52, 30, 81, 19, 76, 82, 21, …
-## $ Educ  <dbl> 2, 4, 4, NA, NA, NA, NA, NA, 5, 3, NA, 5, NA, 2, 2, NA, 3, 5, 5,…
-## $ SES   <dbl> 3, 1, 3, NA, NA, NA, NA, NA, 2, 2, NA, 2, NA, NA, 4, NA, 4, 1, 2…
-## $ MMSE  <dbl> 29, 29, 27, NA, NA, NA, NA, NA, 30, 30, NA, 30, NA, 28, 27, NA, …
-## $ CDR   <dbl> 0.0, 0.0, 0.5, NA, NA, NA, NA, NA, 0.0, 0.0, NA, 0.0, NA, 0.5, 0…
-## $ eTIV  <dbl> 1344, 1147, 1454, 1588, 1737, 1131, 1516, 1505, 1636, 1321, 1574…
-## $ nWBV  <dbl> 0.743, 0.810, 0.708, 0.803, 0.848, 0.862, 0.830, 0.843, 0.689, 0…
-## $ ASF   <dbl> 1.306, 1.531, 1.207, 1.105, 1.010, 1.551, 1.157, 1.166, 1.073, 1…
-## $ Delay <chr> "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "…
+## $ ID    <chr> "OAS1_0001_MR1", "OAS1_0002_MR1", "OAS1_0003_MR1", "OAS1_0004_MR~
+## $ `M/F` <chr> "F", "F", "F", "M", "M", "F", "M", "F", "M", "F", "M", "F", "F",~
+## $ Hand  <chr> "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R", "R",~
+## $ Age   <dbl> 74, 55, 73, 28, 18, 24, 21, 20, 74, 52, 30, 81, 19, 76, 82, 21, ~
+## $ Educ  <dbl> 2, 4, 4, NA, NA, NA, NA, NA, 5, 3, NA, 5, NA, 2, 2, NA, 3, 5, 5,~
+## $ SES   <dbl> 3, 1, 3, NA, NA, NA, NA, NA, 2, 2, NA, 2, NA, NA, 4, NA, 4, 1, 2~
+## $ MMSE  <dbl> 29, 29, 27, NA, NA, NA, NA, NA, 30, 30, NA, 30, NA, 28, 27, NA, ~
+## $ CDR   <dbl> 0.0, 0.0, 0.5, NA, NA, NA, NA, NA, 0.0, 0.0, NA, 0.0, NA, 0.5, 0~
+## $ eTIV  <dbl> 1344, 1147, 1454, 1588, 1737, 1131, 1516, 1505, 1636, 1321, 1574~
+## $ nWBV  <dbl> 0.743, 0.810, 0.708, 0.803, 0.848, 0.862, 0.830, 0.843, 0.689, 0~
+## $ ASF   <dbl> 1.306, 1.531, 1.207, 1.105, 1.010, 1.551, 1.157, 1.166, 1.073, 1~
+## $ Delay <chr> "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "~
 ```
 
 ```r
@@ -738,50 +738,84 @@ longitudinal %>% #Observing the change between visits in n_wbv of the converted 
 
 ![](BIS15-L-Final-Project-Group-9_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
-# App made for our project
 
-We wanted to show the proportions of each of the groups (Demented, Nondemented, Converted) that meet certain criteria. 
+App made for our project, looks at the proportion of patients that are converted and demented given a range of values for range and normalized whole brain volume
 
 
 ```r
-ui <- fluidPage(
-    selectInput("nWBVMin", "Lower bound of normalized brain volume on first visit", choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82")),
-     selectInput("nWBVMax", "Upper bound of normalized brain volume on first visit",    choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82","0.84")),
-    selectInput("AgeMin", "Select Age Min", choices = c("50", "60", "70", "80")),
-    selectInput("AgeMax", "Select Age Max", choices = c("50", "60", "70", "80", "90")),
-                
-  textOutput("result")
+ui <- dashboardPage(skin = "red", 
+                    dashboardHeader(title = "Predictors of Alzheimer's Disease from first visit", 
+                                    titleWidth = 300), 
+                    dashboardSidebar(disable=T), 
+                    dashboardBody(
+  fluidPage(
+  selectInput("nWBVMin", "Lower bound of normalized brain volume on first visit", choices=c("0.6","0.72","0.74","0.76","0.78","0.8","0.82")),
+  selectInput("nWBVMax", "Upper bound of normalized brain volume on first visit",    choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82","0.84")),
+  selectInput("AgeMin", "Lower bound of Age", choices = c("60", "70", "80")),
+  selectInput("AgeMax", "Upper bound of Age", choices = c("60", "70", "80", "90")),
+  
+  textOutput("result"),
+  
+  plotOutput("plot", width = "500px", height = "400px")
   
 )
-
-
+)
+)
 
 server <- function(input, output, session) {
   
-
-  
-numpatients <-  reactive({longitudinal %>%
-    filter(visit==1) %>%
-    filter(n_wbv>=input$nWBVMin & n_wbv<= input$nWBVMax) %>%
-    filter(age>=input$AgeMin & age<= input$AgeMax)%>%
+  totalDemented <- longitudinal %>%
+    filter(group=='Demented') %>%
     nrow()
+  
+  totalConverted <- longitudinal %>%
+    filter(group=='Converted') %>%
+    nrow()
+  #This gets the number of patients who fit the criteria
+  numpatients <-  reactive({longitudinal %>%
+      filter(visit==1) %>%
+      filter(n_wbv>=input$nWBVMin & n_wbv<= input$nWBVMax) %>%
+      filter(age>=input$AgeMin & age<= input$AgeMax)%>%
+      nrow()
+  })
+  
+  #This gets the number of patients who fit the criteria and are converted
+  numconverted <-  reactive({longitudinal %>%
+      filter(visit==1) %>%
+      filter(n_wbv>=input$nWBVMin & n_wbv<= input$nWBVMax) %>%
+      filter(age>=input$AgeMin & age<= input$AgeMax) %>%
+      filter(group == 'Converted') %>%
+      nrow()
+  })
+  
+  #This gets the number of patients who fit the criteria and are demented
+  numdemented <-  reactive({longitudinal %>%
+      filter(visit==1) %>%
+      filter(n_wbv>=input$nWBVMin & n_wbv<= input$nWBVMax) %>%
+      filter(age>=input$AgeMin & age<= input$AgeMax) %>%
+      filter(group == 'Demented') %>%
+      nrow()
+  })
+  
+  #Prints out the output
+  output$result <- renderText({
+    c(numpatients(),"PATIENTS MEET LISTED SEARCH CRITERIA: ", numdemented(), "of the 64 patients with existing dementia had brain volumes and ages within these values. ", numconverted(), "of the 14 who did not have dementia but later converted to dementia had brain volumes and ages within these values.")
+  
+    
+    
     })
-
-numdemented <-  reactive({longitudinal %>%
+  
+  output$plot <- renderPlot({
+    longitudinal%>%
     filter(visit==1) %>%
     filter(n_wbv>=input$nWBVMin & n_wbv<= input$nWBVMax) %>%
     filter(age>=input$AgeMin & age<= input$AgeMax) %>%
-    filter(group=='Demented' | group == 'Converted') %>%
-    nrow()
-    })
-  
-  output$result <- renderText({
-    c(numpatients(),"patients meet listed search criteria, out of which", numdemented(), "have dementia or approximately", round((numdemented()/numpatients())*100), "% of the sample")
+    filter(group != 'Nondemented') %>%
+    ggplot(aes(x = group)) + geom_bar(fill = 'red', alpha = 0.65) + ylim(0, 75) + geom_text(stat='count', aes(label=..count..), vjust=-1) + labs(x = 'Group', y = 'Count') 
+    
   })
-
- 
   
-  # stop the app when we close it
+  # stop the app when closed
   session$onSessionEnded(stopApp)
 }
 
