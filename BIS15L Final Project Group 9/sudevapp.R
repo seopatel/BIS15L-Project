@@ -14,20 +14,26 @@ longitudinal <- janitor::clean_names(longitudinal)
 
 
 ui <- dashboardPage(skin = "red", 
-                    dashboardHeader(title = "Predictors of Alzheimer's Disease from first visit", 
+                    dashboardHeader(title = "Predictors of Alzheimer's Disease From First Visit", 
                                     titleWidth = 600), 
                     dashboardSidebar(disable=T), 
                     dashboardBody(
                       fluidPage(
-                        selectInput("nWBVMin", "Lower bound of normalized brain volume on first visit", choices=c("0.6","0.72","0.74","0.76","0.78","0.8","0.82")),
-                        selectInput("nWBVMax", "Upper bound of normalized brain volume on first visit",    choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82","0.84")),
-                        selectInput("AgeMin", "Lower bound of Age", choices = c("60", "70", "80")),
-                        selectInput("AgeMax", "Upper bound of Age", choices = c("60", "70", "80", "90")),
+                        box(title = "Plot Options", width = 3,
+                            selectInput("nWBVMin", "Lower bound of normalized brain volume on first visit", choices=c("0.6","0.72","0.74","0.76","0.78","0.8","0.82")),
+                            selectInput("nWBVMax", "Upper bound of normalized brain volume on first visit",    choices=c("0.7","0.72","0.74","0.76","0.78","0.8","0.82","0.84")),
+                            selectInput("AgeMin", "Lower bound of Age", choices = c("60", "70", "80")),
+                            selectInput("AgeMax", "Upper bound of Age", choices = c("60", "70", "80", "90")),
+                            hr(),
+                            helpText("Reference:",
+                                     
+                                     "1. Marcus DS, Fotenos AF, Csernansky JG, Morris JC, Buckner RL. Open Access Series of Imaging Studies (OASIS): Longitudinal MRI Data in Nondemented and Demented Older Adults. Journal of cognitive neuroscience. 2010; 22(12):2677-2684. doi:10.1162/jocn.2009.21407.",
+                                     
+                                     "2. Marcus, DS, Wang, TH, Parker, J, Csernansky, JG, Morris, JC, Buckner, RL. Open Access Series of Imaging Studies (OASIS): Cross-Sectional MRI Data in Young, Middle Aged, Nondemented, and Demented Older Adults. Journal of Cognitive Neuroscience, 19, 1498-1507. doi:10.1162/jocn.2007.19.9.1498.")
+                        ),
+                        box(width = 5, textOutput("result")),
                         
-                        textOutput("result"),
-                        
-                        plotOutput("plot", width = "500px", height = "400px")
-                        
+                        box(width = 5, title = "Number of Converted/Demented Patients", plotOutput("plot", width = "450px", height = "400px"))
                       )
                     )
 )
