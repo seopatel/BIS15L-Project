@@ -7,7 +7,7 @@ library(janitor)
 if (!require("tidyverse")) install.packages('tidyverse')
 
 
-longitudinal <- readr::read_csv(here('data','oasis_longitudinal.csv'))
+longitudinal <- readr::read_csv("data/oasis_longitudinal.csv")
 
 
 longitudinal <- janitor::clean_names(longitudinal)
