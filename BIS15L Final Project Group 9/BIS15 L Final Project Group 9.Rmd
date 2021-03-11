@@ -247,11 +247,11 @@ n_wbv_xsectional
 
 
 ```{r}
-xsectional %>% ##comparison of n_wbv between demented patients and age matched controls
+xsectional %>% 
   group_by(as.factor(cdr)) %>% 
   ggplot(aes(x=as.factor(cdr),y=n_wbv,group=as.factor(cdr),color=as.factor(cdr),fill=as.factor(cdr),alpha=.5))+
   geom_boxplot()+
-  geom_jitter()+#Could Exclude
+  geom_jitter()+
   theme_classic()+
   theme(plot.title = element_text(hjust = .5),legend.position = "none")+
   labs(title=" Normalized Whole Brain Volume vs Clinical Dementia Rating",
@@ -264,7 +264,7 @@ xsectional %>% ##comparison of n_wbv between demented patients and age matched c
 
 
 ```{r}
-xsectional %>% #Violin comparison of Demented vs Nondemented and age
+xsectional %>% 
   filter(cdr!="NA", age>60) %>% 
   ggplot(aes(x = as.factor(cdr), y = age, group=cdr,color=as.factor(cdr))) + 
   geom_violin(aes(fill = as.factor(cdr),alpha=.5)) + 
@@ -279,7 +279,7 @@ xsectional %>% #Violin comparison of Demented vs Nondemented and age
 ### Years of Education Between Groups
 
 ```{r}
-longitudinal %>% #Comparison of education between demented participants and age matched controls
+longitudinal %>%
   filter(age>60,group!="Converted",visit==1) %>% 
   group_by(group) %>% 
   ggplot(aes(x=group,y=educ,fill=group,color=group,alpha=.5))+
@@ -295,7 +295,7 @@ longitudinal %>% #Comparison of education between demented participants and age 
 ### SES Distribution Between Groups
 
 ```{r}
-longitudinal %>% #Comparison of ses between demented participants and age matched controls
+longitudinal %>% 
   filter(age>60,group!="Converted",ses!="NA",visit==1) %>% 
   group_by(group) %>% 
   ggplot(aes(x=group,y=ses,fill=group,color=group,alpha=.5))+
@@ -310,22 +310,8 @@ longitudinal %>% #Comparison of ses between demented participants and age matche
 
 ### How does normalized whole brain volume change over subsequent visits?
 
-
 ```{r}
-longitudinal %>% #Comparison of MMSE and CDR
-  filter(visit==1 | visit==2,mmse!="NA") %>% 
-  mutate(cdr = as.factor(cdr)) %>%
-  ggplot(aes(cdr, mmse, fill = cdr,color=cdr))+
-  geom_boxplot(alpha = 0.5) +
-  geom_jitter(aes(color = cdr),alpha = 0.7)+
-  theme_classic()+
-  labs(title= "Mini-Mental State Examination",
-       x="Clinical Dementia Rating",
-       y="Mini-Mental State Examination")+
-  theme(plot.title = element_text(hjust = .5),legend.position = "none")
-```
-```{r}
-longitudinal %>% #Observing the change between visits in n_wbv of the Nondemented group
+longitudinal %>% 
   filter(group=="Nondemented") %>% 
   ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
   geom_point()+
@@ -337,7 +323,7 @@ longitudinal %>% #Observing the change between visits in n_wbv of the Nondemente
   theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
 ```{r}
-longitudinal %>% #Observing the change between visits in n_wbv of the Demented group
+longitudinal %>% 
   filter(group=="Demented") %>% 
   ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
   geom_point()+
@@ -349,7 +335,7 @@ longitudinal %>% #Observing the change between visits in n_wbv of the Demented g
   theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
 ```{r}
-longitudinal %>% #Observing the change between visits in n_wbv of the converted group
+longitudinal %>% 
   filter(group=="Converted") %>% 
   ggplot(aes(x=visit,y=n_wbv,color=subject_id))+ 
   geom_point()+
@@ -361,7 +347,7 @@ longitudinal %>% #Observing the change between visits in n_wbv of the converted 
   theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
 ```{r}
-longitudinal %>% #Observing the change between visits in n_wbv of the Nondemented group with trend line
+longitudinal %>% 
   filter(group=="Nondemented") %>% 
   ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
   geom_point()+
@@ -373,7 +359,7 @@ longitudinal %>% #Observing the change between visits in n_wbv of the Nondemente
   theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
 ```{r}
-longitudinal %>% #Observing the change between visits in n_wbv of the Demented  group with trand line
+longitudinal %>% 
   filter(group=="Demented") %>% 
   ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
   geom_point()+
@@ -385,7 +371,7 @@ longitudinal %>% #Observing the change between visits in n_wbv of the Demented  
   theme(plot.title = element_text(hjust = .5),legend.position = "none")
 ```
 ```{r}
-longitudinal %>% #Observing the change between visits in n_wbv of the converted group with trend line and standard error
+longitudinal %>% 
   filter(group=="Converted") %>% 
   ggplot(aes(x=visit,y=n_wbv,group=group,color=subject_id))+ 
   geom_point()+
