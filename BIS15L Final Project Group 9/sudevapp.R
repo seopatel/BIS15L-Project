@@ -27,9 +27,8 @@ ui <- dashboardPage(skin = "red",
                             hr(),
                             helpText("Reference:",
                                      
-                                     "1. Marcus DS, Fotenos AF, Csernansky JG, Morris JC, Buckner RL. Open Access Series of Imaging Studies (OASIS): Longitudinal MRI Data in Nondemented and Demented Older Adults. Journal of cognitive neuroscience. 2010; 22(12):2677-2684. doi:10.1162/jocn.2009.21407.",
-                                     
-                                     "2. Marcus, DS, Wang, TH, Parker, J, Csernansky, JG, Morris, JC, Buckner, RL. Open Access Series of Imaging Studies (OASIS): Cross-Sectional MRI Data in Young, Middle Aged, Nondemented, and Demented Older Adults. Journal of Cognitive Neuroscience, 19, 1498-1507. doi:10.1162/jocn.2007.19.9.1498.")
+                                     "Marcus DS, Fotenos AF, Csernansky JG, Morris JC, Buckner RL. Open Access Series of Imaging Studies (OASIS): Longitudinal MRI Data in Nondemented and Demented Older Adults. Journal of cognitive neuroscience. 2010; 22(12):2677-2684. doi:10.1162/jocn.2009.21407.")
+                              
                         ),
                         box(width = 5, textOutput("result")),
                         
