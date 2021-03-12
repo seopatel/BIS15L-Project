@@ -384,7 +384,7 @@ longitudinal %>%
 ```
 
 
-App made for our project, looks at the proportion of patients that are converted and demented given a range of values for range and normalized whole brain volume
+App made for our project, looks at the proportion of patients that are converted and demented given a range of values for range and normalized whole brain volume on the first visit. This app was designed for scalability in mind. As the population sample approaches n, these values will be more accurate and can be an accurate predictor of the probability of getting dementia.
 
 ```{r}
 
